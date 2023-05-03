@@ -110,8 +110,9 @@ const Product = ({ salad }) => {
 export const getServerSideProps = async (context) => {
   const { id } = context.query;
   // console.log("ID", id);
-
-  const res = await axios.get(`http://localhost:3000/api/products/${id}`);
+  const res = await axios.get(
+    `https://leafy-delight.vercel.app/api/products/${id}`
+  );
   // console.log(res.data);
   return {
     props: { salad: res.data },

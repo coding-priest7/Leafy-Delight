@@ -123,7 +123,9 @@ export const getServerSideProps = async (context) => {
   const { id } = context.query;
   // console.log("ID", id);
 
-  const res = await axios.get(`http://localhost:3000/api/orders/${id}`);
+  const res = await axios.get(
+    `https://leafy-delight.vercel.app/api/orders/${id}`
+  );
   // console.log(res.data);
   return {
     props: { order: res.data },

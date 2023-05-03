@@ -45,7 +45,7 @@ export const getServerSideProps = async (ctx) => {
   if (token == process.env.TOKEN) {
     admin = true;
   }
-  const res = await axios.get("http://localhost:3000/api/products");
+  const res = await axios.get("https://leafy-delight.vercel.app/api/products");
   return {
     props: { saladList: res.data, admin },
   };
