@@ -30,13 +30,12 @@ const Add = ({ setClose }) => {
     data.append("file", file);
     data.append("upload_preset", "uploads");
     try {
-      const config = {
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-      };
+      // const config = {
+      //   headers: { "X-Requested-With": "XMLHttpRequest" },
+      // };
       const uploadRes = await axios.post(
         "https://api.cloudinary.com/v1_1/de4shkktb/image/upload",
-        data,
-        config
+        data
       );
       const { url } = uploadRes.data;
       const newProduct = {

@@ -91,10 +91,11 @@ const Product = ({ salad }) => {
         </div>
         <div className={styles.add}>
           <input
-            onChange={(e) => setQuantity(e.target.value)}
             type="number"
             defaultValue={1}
+            min={1}
             className={styles.quantity}
+            onChange={(e) => setQuantity(e.target.value)}
           />
           <button className={styles.button} onClick={handleClick}>
             Add to Cart
@@ -106,10 +107,12 @@ const Product = ({ salad }) => {
 };
 
 // we are gonna use this response as a prop
-export const getServerSideProps = async ({ params }) => {
-  const res = await axios.get(
-    `http://localhost:3000/api/products/${params.id}`
-  );
+export const getServerSideProps = async (context) => {
+  const { id } = context.query;
+  // console.log("ID", id);
+
+  const res = await axios.get(`http://localhost:3000/api/products/${id}`);
+  // console.log(res.data);
   return {
     props: { salad: res.data },
   };

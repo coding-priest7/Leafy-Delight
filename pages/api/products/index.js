@@ -3,7 +3,15 @@ import Product from "@component/models/Product";
 
 export default async function handler(req, res) {
   const { method, cookies } = req;
-  const token = cookies.token;
+  const myCookie = req?.headers.cookie || "";
+  const token = myCookie.split(";").reduce((acc, curr) => {
+    const [key, value] = curr.split("=");
+    if (key.trim() === "token") {
+      return value;
+    }
+    return acc;
+  }, "");
+  // const token = cookies.token;
   await dbConnect();
 
   if (method === "GET") {
@@ -15,7 +23,7 @@ export default async function handler(req, res) {
     }
   }
   if (method === "POST") {
-    if (!token || token !== process.env.token) {
+    if (!token || token !== process.env.TOKEN) {
       return res.status(401).json("Not authenticated!");
     }
     try {

@@ -33,6 +33,7 @@ const Login = () => {
         <input
           placeholder="password"
           type="password"
+          defaultValue={password}
           className={styles.input}
           onChange={(e) => setPassword(e.target.value)}
         />

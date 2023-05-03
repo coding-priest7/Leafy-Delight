@@ -34,11 +34,11 @@ const handler = async (req, res) => {
 
 export default handler;
 
-export const getServerSideProps = async ({ params }) => {
-  const res = await axios.get(`${server}/api/orders/${params.id}`);
-  return {
-    props: {
-      order: res.data,
-    },
-  };
-};
+// export const getServerSideProps = async ({ params }) => {
+//   const res = await axios.get(`${server}/api/orders/${params.id}`);
+//   return {
+//     props: {
+//       order: res.data,
+//     },
+//   };
+// };

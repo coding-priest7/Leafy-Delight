@@ -20,7 +20,7 @@ export default function Home({ saladList, admin }) {
         <link rel="icon" type="image/x-icon" href="favicon.png" />
       </Head>
       <Featured />
-      {<AddButton setClose={setClose} />}
+      {admin && <AddButton setClose={setClose} />}
       <SaladList saladList={saladList} />
       {!close && <Add setClose={setClose} />}
     </div>
@@ -29,10 +29,20 @@ export default function Home({ saladList, admin }) {
 
 // we are gonna use this response as a prop
 export const getServerSideProps = async (ctx) => {
-  const myCookie = ctx.req?.cookies || "";
+  const myCookie = ctx.req?.headers.cookie || "";
   let admin = false;
+  const token = myCookie.split(";").reduce((acc, curr) => {
+    const [key, value] = curr.split("=");
+    if (key.trim() === "token") {
+      return value;
+    }
+    return acc;
+  }, "");
+  // const cookie = ctx.req?.cookies || "";
+  // let admin = false;
+  // const token = cookie.split
 
-  if (myCookie.token === process.env.TOKEN) {
+  if (token == process.env.TOKEN) {
     admin = true;
   }
   const res = await axios.get("http://localhost:3000/api/products");

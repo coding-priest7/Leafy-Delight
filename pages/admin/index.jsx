@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "../../styles/Admin.module.css";
 
 const Index = ({ orders, products }) => {
-  const [saladList, setsaladList] = useState(products);
+  const [saladList, setSaladList] = useState(products);
   const [orderList, setOrderList] = useState(orders);
   const status = ["preparing", "on the way", "delivered"];
 
@@ -12,9 +12,9 @@ const Index = ({ orders, products }) => {
     console.log(id);
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/products/` + id
+        "http://localhost:3000/api/products/" + id
       );
-      setsaladList(saladList.filter((salad) => salad._id !== id));
+      setSaladList(saladList.filter((salad) => salad._id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -25,7 +25,7 @@ const Index = ({ orders, products }) => {
     const currentStatus = item.status;
 
     try {
-      const res = await axios.put(`http://localhost:3000/api/orders/` + id, {
+      const res = await axios.put(`http://localhost:3000/api/orders/${id}`, {
         status: currentStatus + 1,
       });
       setOrderList([
@@ -118,9 +118,17 @@ const Index = ({ orders, products }) => {
 };
 
 export const getServerSideProps = async (ctx) => {
-  const myCookie = ctx.req?.cookies || "";
+  const myCookie = ctx.req?.headers.cookie || "";
+  const token = myCookie.split(";").reduce((acc, curr) => {
+    const [key, value] = curr.split("=");
+    if (key.trim() === "token") {
+      return value;
+    }
+    return acc;
+  }, "");
+  // console.log(token, process.env.TOKEN);
 
-  if (myCookie.token !== process.env.TOKEN) {
+  if (token !== process.env.TOKEN) {
     return {
       redirect: {
         destination: "/admin/login",
@@ -129,8 +137,8 @@ export const getServerSideProps = async (ctx) => {
     };
   }
 
-  const productRes = await axios.get(`http://localhost:3000/api/products`);
-  const orderRes = await axios.get(`http://localhost:3000/api/orders`);
+  const productRes = await axios.get("http://localhost:3000/api/products");
+  const orderRes = await axios.get("http://localhost:3000/api/orders");
 
   return {
     props: {
